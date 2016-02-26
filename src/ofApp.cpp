@@ -7,18 +7,18 @@ void ofApp::setup(){
   ofEnableBlendMode(OF_BLENDMODE_SCREEN);
   ofBackground(0, 0, 0);
   
-  
-  
+  SegmentsContainer* segmentsContainer = NULL;
   for(int i = 0; i < NUM_SEGMENTS_CONTAINERS; i++) {
-    SegmentsContainer segmentsContainer;
-    segmentsContainer.setup();
-    segmentsContainers.push_back(segmentsContainer);
+    segmentsContainer = new SegmentsContainer;
+    segmentsContainer->setup();
+    segmentsContainers.push_back(*segmentsContainer);
   }
   
   mouseX = 0;
   mouseY = 0;
   
   cam.setDistance(1000);
+  delete segmentsContainer;
 }
 
 //--------------------------------------------------------------

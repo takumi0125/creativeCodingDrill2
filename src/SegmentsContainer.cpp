@@ -3,12 +3,13 @@
 #include "Segment.h"
 
 SegmentsContainer::SegmentsContainer() {
-  
+  Segment* segment = NULL;
   for(int i = 0; i < NUM_SEGMENTS; i++) {
-    Segment segment;
-    segment.setup(60, 20, 10);
-    segments.push_back(segment);
+    segment = new Segment;
+    segment->setup(60, 20, 10);
+    segments.push_back(*segment);
   }
+  delete segment;
 }
 
 SegmentsContainer::~SegmentsContainer() {
@@ -39,7 +40,7 @@ void SegmentsContainer::setup() {
   color.setHsb(ofRandom(255), ofRandom(128, 255), ofRandom(128, 200));
 }
 
-void SegmentsContainer::drag(Segment *segment, float x, float y, float z) {
+void SegmentsContainer::drag(Segment* segment, float x, float y, float z) {
   ofVec3f to(x, y, z);
   
   ofVec3f v1 = (to - segment->position).getNormalized();
@@ -72,10 +73,12 @@ void SegmentsContainer::update(float time) {
   drag(&segments[0], x, y, z);
   segments[0].update();
   
+  Segment* beforeSegment = NULL;
+  
   for(int i = 1; i < NUM_SEGMENTS; i++) {
     setColor(i, time);
-    Segment beforeSegment = segments[i - 1];
-    drag(&segments[i], beforeSegment.position.x, beforeSegment.position.y, beforeSegment.position.z);
+    beforeSegment = &segments[i - 1];
+    drag(&segments[i], beforeSegment->position.x, beforeSegment->position.y, beforeSegment->position.z);
     segments[i].update();
   }
   
